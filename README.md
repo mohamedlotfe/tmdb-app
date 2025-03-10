@@ -1,98 +1,187 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+Overview
+--------
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is a RESTful API built using NestJS that integrates with the [TMDB API](https://www.themoviedb.org/) to provide movie-related functionalities. The application allows users to interact with movies by rating them, adding movies to their watchlist, filtering by genre, and more.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The app is containerized using Docker and includes caching mechanisms to reduce database calls. It also provides Swagger documentation for API exploration.
 
-## Description
+* * * * *
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Features
+--------
 
-## Project setup
+### Completed Features:
 
+-   CRUD Operations :
+    -   Fetch popular movies from TMDB and store them in the database.
+    -   Sync TMDB data daily via a cron job or manually via CLI command (`npm run cli sync:movies`).
+-   User Authentication :
+    -   JWT-based authentication for secure API access.
+    -   Login endpoint to generate tokens.
+-   Movie Endpoints :
+    -   List movies with pagination, search, and filtering by genre.
+    -   Rate a movie (returns average rating).
+    -   Add/Remove movies from a user's watchlist.
+-   Caching :
+    -   Redis-based caching for frequently accessed movie data.
+-   Database Integration :
+    -   PostgreSQL database with TypeORM for ORM.
+    -   Relationships between `User`, `Movie`, and `Rating`.
+-   API Documentation :
+    -   Swagger UI available at `/api`.
+-   Docker Support :
+    -   Application runs in Docker containers (PostgreSQL, Redis, and the app itself).
+    -   Launch with `docker-compose up`.
+
+* * * * *
+
+### Missing Features:
+
+-   Unit Testing :
+    -   Unit tests are not fully implemented (current coverage < 85%).
+-   Advanced Filtering :
+    -   Filtering by release year or other criteria is not yet implemented.
+-   Refresh Token Mechanism :
+    -   JWT refresh token flow is not implemented.
+-   Error Handling Enhancements :
+    -   Global exception handling could be improved for production readiness.
+-   Rate Limiting :
+    -   API rate limiting is not implemented.
+-   Frontend Integration :
+    -   No frontend interface is provided; only backend APIs are implemented.
+
+* * * * *
+
+How to Use
+----------
+
+### Prerequisites
+
+-   Node.js >= 16
+-   Docker and Docker Compose installed
+-   A TMDB API key (get one from [TMDB](https://www.themoviedb.org/) )
+
+* * * * *
+
+### Setup Instructions
+
+1.  Clone the Repository :
+
+    cd movie-api
+
+2.  Set Environment Variables : Create a `.env` file in the root directory and add the following variables:
+
+
+3.  Run the Application : Start the app with Docker:
 ```bash
-$ npm install
+$ docker-compose up --build
 ```
 
-## Compile and run the project
+    
+
+4.  Access the Application :
+
+    -   Swagger API Docs: <http://localhost:8080/api>
+    -   App Endpoint: [http://localhost:8080](http://localhost:8080/)
+5.  Sync TMDB Data : Run the sync command manually:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ npm run cli sync:movies
 ```
+ 
 
-## Run tests
+6.  Test Authentication :
 
-```bash
-# unit tests
-$ npm run test
+    -   Register/Login to get a JWT token:
 
-# e2e tests
-$ npm run test:e2e
+     ```bash
 
-# test coverage
-$ npm run test:cov
-```
+        curl -X POST http://localhost:8080/auth/login
 
-## Deployment
+        -H "Content-Type: application/json"
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+        -d '{"email": "user@example.com", "password": "password"}'
+     ```
+     
+    -   Use the token in subsequent requests:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+        ```bash
+        curl -X POST http://localhost:8080/movies/123/rate
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+        -H "Authorization: Bearer YOUR_TOKEN_HERE"
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+        -H "Content-Type: application/json"
 
-## Resources
+        -d '{"rating": 4}' ```
 
-Check out a few resources that may come in handy when working with NestJS:
+* * * * *
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+API Endpoints
+-------------
 
-## Support
+### Auth
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+-   POST /auth/login : Authenticate and get a JWT token.
 
-## Stay in touch
+    ```json
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    {
 
-## License
+    "email": "user@example.com",
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+    "password": "password"
+
+    }
+    ```
+
+### Movies
+
+-   GET /movies : List movies with optional filters (genre, search, pagination).
+-   POST /movies/:id/rate : Rate a movie (requires authentication).
+
+    ```json
+
+    {
+
+    "rating": 4
+
+    }
+    ```
+
+-   POST /movies/:id/watchlist : Add/Remove a movie from the watchlist (toggle functionality).
+
+* * * * *
+
+Technologies Used
+-----------------
+
+-   Backend Framework : NestJS
+-   Database : PostgreSQL
+-   ORM : TypeORM
+-   Caching : Redis
+-   Authentication : JWT
+-   Containerization : Docker
+-   API Documentation : Swagger
+
+* * * * *
+
+Future Improvements
+-------------------
+
+-   Implement unit tests to achieve >85% coverage.
+-   Add refresh token mechanism for JWT.
+-   Introduce rate limiting to prevent abuse.
+-   Enhance error handling for production environments.
+-   Build a frontend interface for better user interaction.
+
+* * * * *
+
+Contribution
+------------
+
+Feel free to fork the repository and submit pull requests. For major changes, please open an issue first to discuss the proposed changes.
+
+
+* * * * *
+
+This Markdown file is clean, professional, and easy to read. It includes all the necessary sections in a structured format, making it suitable for sharing on GitHub. Let me know if you'd like further adjustments!
