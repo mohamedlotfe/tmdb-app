@@ -3,8 +3,8 @@ Overview
 
 This is a RESTful API built using NestJS that integrates with the [TMDB API](https://www.themoviedb.org/) to provide movie-related functionalities. The application allows users to interact with movies by rating them, adding movies to their watchlist, filtering by genre, and more.
 
-The app is containerized using Docker and includes caching mechanisms to reduce database calls. It also provides Swagger documentation for API exploration.
-
+The app is containerized using Docker and includes caching mechanisms to reduce database calls. It also provides Swagger documentation for API exploration:
+![Swagger UI](https://github.com/mohamedlotfe/tmdb-app/blob/master/public/Screenshot%202025-03-10%20150820.png) <!-- Example placeholder -->
 * * * * *
 
 Features
