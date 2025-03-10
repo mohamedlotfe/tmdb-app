@@ -14,7 +14,7 @@ Features
 
 -   CRUD Operations :
     -   Fetch popular movies from TMDB and store them in the database.
-    -   Sync TMDB data daily via a cron job or manually via CLI command (`npm run sync`).
+    -   Sync TMDB data daily via a cron job or manually via CLI command (`npm run cli sync:movies`).
 -   User Authentication :
     -   JWT-based authentication for secure API access.
     -   Login endpoint to generate tokens.
